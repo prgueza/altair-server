@@ -3,9 +3,9 @@ Python web server for the Altair hands on test
 
 ## Table of contents
 
-1. Building and running the app
-2. Technical details
-3. Next steps
+1. [Building and running the app](#1-building-and-running-the-app)
+2. [Technical details](#2-technical-details)
+3. [Next steps](#3-next-steps)
 
 ## 1. Building and running the app
 
