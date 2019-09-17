@@ -209,6 +209,8 @@ and has not been hard tested.
 
 ### App structure and design
 
+![Design](/img/design.png)
+
 Upon initialization, the app will spawn a new DB using the BeerDB class, which is a *Singleton* for this data structure and
 provides the database of its basic operations (Create, Read and Delete for simplicity). The use of the *Singleton* pattern here
 is used so that it guarantees that the DB instance is unique and the collection will be preserved after multiple 
@@ -242,5 +244,7 @@ build a more robust and functional app.
   the client app. However, there are many other failover techniques which should be implemented both on client and server
   side in order to make this a robust system.
 - Error handling is not configured. Some exceptions are raised, but exceptions coming from the Tornado Framework are not 
-  mapped nor handled.
+  mapped nor handled. However the right pattern seems to be extend the Tornado Web Handlers using a base
+  class for common tasks such as error handling and user authentication and subclassing this custom handler
+  for any specific request handling we want to perform. 
 - App structure is something I still struggle with, and possibly could be improved.

@@ -19,12 +19,12 @@ def paginate(func):
         end = page_number * page_size
         # Full page
         if len(query_result) > end:
-            idxs = slice(start, end)
-            return query_result[idxs]
+            page_slice = slice(start, end)
+            return query_result[page_slice]
         # Partial page
         elif len(query_result) > start:
-            idxs = slice(start, len(query_result))
-            return query_result[idxs]
+            page_slice = slice(start, len(query_result))
+            return query_result[page_slice]
         # Empty page
         else:
             return []
@@ -50,23 +50,3 @@ def serialize(func):
         return list(map(lambda beer: beer.serialize(), result)) if isinstance(result, list) else result.serialize()
 
     return serializer
-
-
-def sort(func):
-    """
-    Sort decorator: sorts query results attending to criteria
-    :param func: Decorated function
-    :return: The sorter function
-    """
-
-    async def sorter(*args, **kwargs):
-        """
-        Sorter: Sorts the list attending to the query
-        :param args: args passed to the decorated function
-        :param kwargs: kwargs passed to the decorated function which contain the query options
-        :return: A sorted list of beers
-        """
-        result = func(*args, **kwargs)
-        return result
-
-    return sorter

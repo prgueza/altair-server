@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from collections import Counter
 
 import tornado.ioloop
 import tornado.web
@@ -45,8 +46,6 @@ class BeersHandler(tornado.web.RequestHandler):
             new_beer = Beer(tap_id=beer['tapId'], beer_id=beer_id, volume=beer['volume'])
             beer = await beers.add(new_beer)
             self.write({'beer': beer})
-            for tap in taps:  # Notify using WebSockets
-                tap.write_message('Tap with id ' + str(beer['tapId']) + ' posted a new beer!')
         except UnValidVolumeError as error:
             logging.error(error.message)
             self.set_status(error.code)
@@ -108,20 +107,60 @@ class RealTimeHandler(tornado.websocket.WebSocketHandler):
         logging.info('A tap has been disconnected from the system')
 
 
+"""
+We implement here two Observer classes which are hooked to the DB operations and perform actions on behalf. They do
+basically the same, but this way we can see how we can attach more than one observer and trigger different actions 
+using this structure. In this case the notifier broadcasts every time a beer is added to the collection and the 
+reporter reports statistics about beer income every 10 beers.
+"""
+
+
 class Notifier(Observer):
     """
-    Notifier: This class is attached to the BeerDB instance as an Observer and broadcasts a message upon DB operations
+    Notifier: This class is attached to the BeerDB instance as an Observer and broadcasts a message upon DB operations.
+    It will broadcast a message to connected devices indicating which id posted a beer and the id of the posted beer
     """
 
-    def on_notify(self, message) -> None:
+    def on_notify(self, _, message) -> None:
         """
         We implement this method from the abstract Observer class so the BeersDB Observable can call it on DB updates
         :param message: Message from the BeersDB method that invoked the notification
+        :param _: For simple messages we don't need to use the db parameter
         :return: None
         """
         logging.info('New DB Hook Notification: %s', message)
         for tap in taps:
+            # Non blocking asynchronicity
             tap.write_message(message)
+
+
+class Reporter(Observer):
+    """
+    Reporter: Each 10 beers it will build up a report message and broadcast it to all connected devices
+    """
+
+    def on_notify(self, db, _) -> None:
+        if db.count % 10 == 0:
+            self.report(db)
+
+    @staticmethod
+    def report(db):
+        """
+        Reads data from the database and performs an aggregation to check the different contributions to the database
+        from all the taps that ever posted a beer to the system.
+        :param db: The BeerDB Singleton
+        :return: None
+        """
+        current_beers = db.beers
+        beers_served_by_tap = Counter(list(map(lambda beer: beer.tap_id, current_beers)))
+        tap_contributions = {'tap ' + str(tap_id): str(round((beers_served / db.count) * 100, 2)) + '%'
+                             for (tap_id, beers_served)
+                             in beers_served_by_tap.items()}
+        tap_contributions['total beers'] = db.count
+        logging.info(tap_contributions)
+        for tap in taps:
+            # Non blocking asynchronicity
+            tap.write_message(tap_contributions)
 
 
 def make_app(port=8338):
@@ -156,9 +195,11 @@ if __name__ == "__main__":
     # Create new BeerDB collection
     beers = BeerDB()
     logging.info('BeerDB Instance running')
-    # Attach notifier
+    # Attach notifier and reporter
     notifier = Notifier()
+    reporter = Reporter()
     beers.attach(notifier)
+    beers.attach(reporter)
     # Initialize beer_id generator
     beer_ids = ids(0)
     # Set of active connected taps

@@ -4,7 +4,7 @@ from typing import List
 from src.helpers.exceptions import NotFoundException
 from src.patterns.decorators import *
 from src.patterns.observer import Observable, Observer
-from src.patterns.singleton import SingletonMetaClass
+from src.patterns.singleton import BeerDBMetaClass
 
 
 class BeerDB(Observable):
@@ -16,7 +16,7 @@ class BeerDB(Observable):
     __beers = []
 
     # To avoid metaclass conflicts
-    __metaclass__ = SingletonMetaClass
+    __metaclass__ = BeerDBMetaClass
 
     """
     We have used the Observable class here so we can notify on DB updates to any other class that might want to be 
@@ -44,9 +44,9 @@ class BeerDB(Observable):
         :param message: Message that will be passed to the notified observers
         :return: None
         """
-        # Ideally we could pass the whole class, but in this scenario we just want a message to be passed
+        # We pass a message for simple notifications and the db instance for more complex operations
         for observer in self.__observers:
-            observer.on_notify(message)
+            observer.on_notify(self, message)
 
     @property
     def beers(self):
@@ -56,6 +56,14 @@ class BeerDB(Observable):
         """
         return self.__beers
 
+    @property
+    def count(self):
+        """
+        Count property: The number of beers in the collection
+        :return: The total number of beers
+        """
+        return len(self.__beers)
+
     @serialize
     async def add(self, beer):
         """
@@ -64,7 +72,7 @@ class BeerDB(Observable):
         :return: Beer added to the collection
         """
         self.__beers.append(beer)
-        self.notify('Beer ' + str(beer.beer_id) + ' added to the collection')
+        self.notify('Tap with id ' + str(beer.tap_id) + ' posted a new beer (id: ' + str(beer.beer_id) + ')!')
         return beer
 
     async def delete(self, beer_id):
@@ -90,7 +98,6 @@ class BeerDB(Observable):
 
     @serialize
     @paginate
-    # @sort
     async def find(self):
         """
         Find All query: Returns a paginated and sorted list containing every beer stored in the db
@@ -100,7 +107,6 @@ class BeerDB(Observable):
 
     @serialize
     @paginate
-    # @sort
     async def find_by_type(self, beer_type):
         """
         Find By Type query: Returns a paginated and sorted list of beers corresponding to the specified beer type

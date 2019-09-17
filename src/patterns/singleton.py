@@ -5,7 +5,7 @@ from typing import Optional
 from ..beer.beerdb import *
 
 
-class SingletonMetaClass(type):
+class BeerDBMetaClass(type):
     """
     As the BeerDB class acts as a database it might be useful to declare it as a Singleton so every call to the
     class constructor method results in the same instance. This helps observation declarations on the BeerDB class.
