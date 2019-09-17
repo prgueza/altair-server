@@ -14,8 +14,8 @@ Python web server for the Altair hands on test
 > This is the recommended way for testing the application as it doesn't need any additional configuration. Note that this
 is not a production ready configuration and should only be used in one node.
 
-The app comes with a `docker-compose.yml` file which can be used to deploy a stack of containers using Docker Swarm which
-spawns a server and three different clients within the same network. 
+The app comes with a `docker-compose.yml` file which can be used to deploy a stack of containers using Docker Swarm
+spawning a server and three different clients within the same network. 
 
 First we need to start a Docker Swarm node using:
 
@@ -100,7 +100,7 @@ $ docker service logs -f qij24he6jzv0
     altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:12,616 [  MainThread  ] [ INFO ] Posting beer...
 ```
 
-### 1.2 Running the server
+### 1.2 Running the server standalone mode
 
 The app is meant to be run using a Dockerized environment. The latest image of the app is hosted in Docker Hub under 
 the tag `prodalia/altair-server:latest` and it is public.
@@ -139,7 +139,7 @@ following command:
 $ docker image build -t altair-server-mod .
 ```
 
-### 1.3 Running the client
+### 1.3 Running the client standalone mode
 
 The client is also meant to be run as a Docker container, and takes environment arguments so we can manually set the
 `tap_id` and the `inet_addr` so it can communicate with the server. 
