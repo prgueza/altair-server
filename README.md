@@ -152,7 +152,7 @@ binding can be done to any other host port, but the container port has to remain
 the Web Service will be listening to.
 
 We can then interact with the app by running one or more [clients](https://github.com/pedro-rodalia/altair-client) or
-using this [Postman Collection]().
+using [postman](https://www.getpostman.com/).
 
 The App logs detailed information about the processes, and helps understand how it works. In order to see the logs 
 in real time we can do so using the command:
