@@ -1,4 +1,5 @@
 # Altair Server
+
 Python web server for the Altair hands on test
 
 ## Table of contents
@@ -45,13 +46,13 @@ We can then check the state of the services using:
 ```shell script
 $ docker stack ps altair-stack
 
-    ID                  NAME                             IMAGE                           NODE                DESIRED STATE       CURRENT STATE           ERROR                       PORTS
-    uo5p5p88ad19        altair-stack_altair-client-1.1   prodalia/altair-client:latest   docker-desktop      Running             Running 3 minutes ago                               
-    qij24he6jzv0        altair-stack_altair-client-3.1   prodalia/altair-client:latest   docker-desktop      Running             Running 2 minutes ago                               
-    9phs3kei28cv        altair-stack_altair-server.1     prodalia/altair-server:latest   docker-desktop      Running             Running 3 minutes ago                               
-    fewf42pkmvjn        altair-stack_altair-client-2.1   prodalia/altair-client:latest   docker-desktop      Running             Running 3 minutes ago                               
-    kkwodafwqhjs        altair-stack_altair-client-3.1   prodalia/altair-client:latest   docker-desktop      Shutdown            Failed 3 minutes ago    "task: non-zero exit (1)"   
-    tsmgomc9f7yu        altair-stack_altair-client-2.1   prodalia/altair-client:latest   docker-desktop      Shutdown            Failed 3 minutes ago    "task: non-zero exit (1)"  
+    ID                  NAME                             IMAGE                          NODE                DESIRED STATE       CURRENT STATE            ERROR                       PORTS
+    z3l3ma728ys8        altair-stack_altair-client-1.1   prodalia/altair-client:1.0.0   docker-desktop      Running             Running 17 seconds ago                               
+    ts8gl7y0qfnw        altair-stack_altair-client-3.1   prodalia/altair-client:1.0.0   docker-desktop      Running             Running 15 seconds ago                               
+    mzan8v67vm1d        altair-stack_altair-client-2.1   prodalia/altair-client:1.0.0   docker-desktop      Running             Running 15 seconds ago                               
+    ytg4b1phbxtk        altair-stack_altair-server.1     prodalia/altair-server:1.0.0   docker-desktop      Running             Running 17 seconds ago                               
+    ngzqd8o4jlgw        altair-stack_altair-client-3.1   prodalia/altair-client:1.0.0   docker-desktop      Shutdown            Failed 21 seconds ago    "task: non-zero exit (1)"   
+    7ug06lv585nm        altair-stack_altair-client-2.1   prodalia/altair-client:1.0.0   docker-desktop      Shutdown            Failed 21 seconds ago    "task: non-zero exit (1)"   
 ```
 > Here we can see how two of the clients failed at first (as they tried to start before the server was up) but are now
 > successfully running. 
@@ -65,45 +66,73 @@ We can check the logs of any of our services using `$ docker service logs <servi
 ```shell script
 $ docker service logs -f 9phs3kei28cv 
 
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:03,598 [  MainThread  ] [ INFO ] BeerDB Instance running
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:03,598 [  MainThread  ] [ INFO ] Instance with id 140056971535632 is observing DB updates
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:03,598 [  MainThread  ] [ INFO ] BeerDB Instance running
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:03,599 [  MainThread  ] [ INFO ] Started Web Service listening for connections on port 8338
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:05,480 [  MainThread  ] [ INFO ] 101 GET /sockets/beers (10.0.0.4) 0.53ms
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:05,480 [  MainThread  ] [ INFO ] A new tap has been connected to the system
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:05,483 [  MainThread  ] [ INFO ] New DB Hook Notification: Beer added to the collection
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:05,484 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 1.36ms
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:05,632 [  MainThread  ] [ INFO ] 101 GET /sockets/beers (10.0.0.4) 0.35ms
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:05,632 [  MainThread  ] [ INFO ] A new tap has been connected to the system
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:05,635 [  MainThread  ] [ INFO ] New DB Hook Notification: Beer added to the collection
-    altair-stack_altair-server.1.9phs3kei28cv@docker-desktop    | 2019-09-17 08:50:05,635 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 0.79ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:57,740 [  MainThread  ] [ INFO ] BeerDB Instance running
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:57,740 [  MainThread  ] [ INFO ] Instance with id 140564541893072 is observing DB updates
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:57,740 [  MainThread  ] [ INFO ] Instance with id 140564541893136 is observing DB updates
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:57,742 [  MainThread  ] [ INFO ] Started Web Service listening for connections on port 8338
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:57,815 [  MainThread  ] [ INFO ] 101 GET /sockets/beers (10.0.0.4) 0.47ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:57,815 [  MainThread  ] [ INFO ] A new tap has been connected to the system
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:57,818 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 1 posted a new beer (id: 0)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:57,818 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 0.70ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:59,584 [  MainThread  ] [ INFO ] 101 GET /sockets/beers (10.0.0.4) 0.35ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:59,584 [  MainThread  ] [ INFO ] A new tap has been connected to the system
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:59,586 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 2 posted a new beer (id: 1)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:53:59,587 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 0.70ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:00,094 [  MainThread  ] [ INFO ] 101 GET /sockets/beers (10.0.0.4) 0.33ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:00,094 [  MainThread  ] [ INFO ] A new tap has been connected to the system
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:00,098 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 3 posted a new beer (id: 2)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:00,099 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 1.07ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:00,824 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 1 posted a new beer (id: 3)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:00,825 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 1.27ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:02,107 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 3 posted a new beer (id: 4)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:02,108 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 1.28ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:03,833 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 1 posted a new beer (id: 5)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:03,834 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 1.12ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:04,115 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 3 posted a new beer (id: 6)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:04,116 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 1.10ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:04,840 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 1 posted a new beer (id: 7)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:04,841 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 1.24ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:08,123 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 3 posted a new beer (id: 8)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:08,124 [  MainThread  ] [ INFO ] 200 POST /api/beers (10.0.0.4) 1.04ms
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:09,595 [  MainThread  ] [ INFO ] New DB Hook Notification: Tap with id 2 posted a new beer (id: 9)!
+    altair-stack_altair-server.1.ytg4b1phbxtk@docker-desktop    | 2019-09-17 18:54:09,595 [  MainThread  ] [ INFO ] {'tap 1': '40.0%', 'tap 2': '20.0%', 'tap 3': '40.0%', 'total beers': 10}
 ```
 
 - Client logs:
 
 ```shell script
 $ docker service logs -f qij24he6jzv0
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:06,593 [  MainThread  ] [ INFO ] 
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    |  - Inet Addr: altair-server:8338 
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    |  - Tap ID: 3 
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:06,594 [  MainThread  ] [ INFO ] Attempting to connect to: ws://altair-server:8338/sockets/beers
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:06,597 [  MainThread  ] [ INFO ] Posting beer...
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:06,600 [  MainThread  ] [ INFO ] Beer 3 added to the collection
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:06,600 [  MainThread  ] [ INFO ] Tap with id 3 posted a new beer!
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:09,604 [  MainThread  ] [ INFO ] Posting beer...
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:09,606 [  MainThread  ] [ INFO ] Beer 4 added to the collection
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:09,606 [  MainThread  ] [ INFO ] Tap with id 2 posted a new beer!
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:09,610 [  MainThread  ] [ INFO ] Beer 5 added to the collection
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:09,610 [  MainThread  ] [ INFO ] Tap with id 3 posted a new beer!
-    altair-stack_altair-client-3.1.qij24he6jzv0@docker-desktop    | 2019-09-17 08:50:12,616 [  MainThread  ] [ INFO ] Posting beer...
+
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:53:57,811 [  MainThread  ] [ INFO ] 
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    |  - Inet Addr: altair-server:8338 
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    |  - Tap ID: 1 
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:53:57,812 [  MainThread  ] [ INFO ] Attempting to connect to: ws://altair-server:8338/sockets/beers
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:53:57,815 [  MainThread  ] [ INFO ] Posting beer...
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:53:57,818 [  MainThread  ] [ INFO ] Tap with id 1 posted a new beer (id: 0)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:00,820 [  MainThread  ] [ INFO ] Posting beer...
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:00,821 [  MainThread  ] [ INFO ] Tap with id 2 posted a new beer (id: 1)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:00,822 [  MainThread  ] [ INFO ] Tap with id 3 posted a new beer (id: 2)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:00,825 [  MainThread  ] [ INFO ] Tap with id 1 posted a new beer (id: 3)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:03,829 [  MainThread  ] [ INFO ] Posting beer...
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:03,830 [  MainThread  ] [ INFO ] Tap with id 3 posted a new beer (id: 4)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:03,833 [  MainThread  ] [ INFO ] Tap with id 1 posted a new beer (id: 5)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:04,836 [  MainThread  ] [ INFO ] Posting beer...
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:04,838 [  MainThread  ] [ INFO ] Tap with id 3 posted a new beer (id: 6)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:04,841 [  MainThread  ] [ INFO ] Tap with id 1 posted a new beer (id: 7)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:09,850 [  MainThread  ] [ INFO ] Posting beer...
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:09,853 [  MainThread  ] [ INFO ] Tap with id 3 posted a new beer (id: 8)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:09,853 [  MainThread  ] [ INFO ] Tap with id 2 posted a new beer (id: 9)!
+    altair-stack_altair-client-1.1.z3l3ma728ys8@docker-desktop    | 2019-09-17 18:54:09,854 [  MainThread  ] [ INFO ] {"tap 1": "40.0%", "tap 2": "20.0%", "tap 3": "40.0%", "total beers": 10}    
 ```
 
 ### 1.2 Running the server standalone mode
 
 The app is meant to be run using a Dockerized environment. The latest image of the app is hosted in Docker Hub under 
 the tag `prodalia/altair-server:latest` and it is public.
+
+> This scripts use the altair-network so it should be created first if we want to use it `docker network create altair-network` 
 
 The following command is used to run the app using the latest image:
 

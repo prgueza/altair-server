@@ -3,7 +3,7 @@ version: '3.1'
 services:
 
   altair-server:
-    image: prodalia/altair-server:latest
+    image: prodalia/altair-server:1.0.0
     ports:
       - 8080:8338
     networks:
@@ -14,7 +14,7 @@ services:
         delay: 5s
 
   altair-client-1:
-    image: prodalia/altair-client:latest
+    image: prodalia/altair-client:1.0.0
     environment:
       - TAP_ID=1
       - INET_ADDR=altair-server:8338
@@ -26,7 +26,7 @@ services:
         delay: 5s
 
   altair-client-2:
-    image: prodalia/altair-client:latest
+    image: prodalia/altair-client:1.0.0
     environment:
       - TAP_ID=2
       - INET_ADDR=altair-server:8338
@@ -38,7 +38,7 @@ services:
         delay: 5s
 
   altair-client-3:
-    image: prodalia/altair-client:latest
+    image: prodalia/altair-client:1.0.0
     environment:
       - TAP_ID=3
       - INET_ADDR=altair-server:8338
