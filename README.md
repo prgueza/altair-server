@@ -241,4 +241,6 @@ build a more robust and functional app.
   containerized environment we could retry this connection by restarting the service instead of introducing logic within
   the client app. However, there are many other failover techniques which should be implemented both on client and server
   side in order to make this a robust system.
+- Error handling is not configured. Some exceptions are raised, but exceptions coming from the Tornado Framework are not 
+  mapped nor handled.
 - App structure is something I still struggle with, and possibly could be improved.
